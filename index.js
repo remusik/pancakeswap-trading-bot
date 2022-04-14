@@ -348,6 +348,6 @@ var runing = async function() {
                 }
 }
 
-setInterval(function(){runing()}, 30000);
+setInterval(function(){runing()}, 600000);
 runing();
 // event();
