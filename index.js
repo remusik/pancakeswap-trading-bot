@@ -323,28 +323,29 @@ var runing = async function() {
 
 
 
+
+
     
 
-    if (send == 1)
-        if (balance_token >= USDTAMOUNTS / rate)
-            if (rate > SELLPRICE) {
-                console.log("sell");
-                AAA.sell(USDTAMOUNTS / rate);
-                send = 0;
-            }
 
 
-
-    if (send == 0)
-        if (balance_busd >= USDTAMOUNT)
+    
+        if (balance_busd >= USDTAMOUNT){
             if (rate < BUYPRICE) {
                 console.log("buy");
                 let amountOutMin = USDTAMOUNT / rate * 0.99;
                 AAA.buy(USDTAMOUNT, amountOutMin);
                 send = 1;
-            }
+            }}
 
+            else
 
+            if (balance_token >= USDTAMOUNTS / rate)
+                if (rate > SELLPRICE) {
+                    console.log("sell");
+                    AAA.sell(USDTAMOUNTS / rate);
+                    send = 0;
+                }
 }
 
 setInterval(function(){runing()}, 30000);
