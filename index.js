@@ -1,11 +1,8 @@
 //SETTING TOKEN TO TRADE
 
-var pancakeswap_lp_token = '0x14E5C9b5CB59d2Af6D121Bbf5a322c6fE9F18657'; //PANCAKE_LP_BUSD
-var token_contract = '0x6cC76132A84e2095c1F4f2EA71881dAEf8a75D5e'; //TOKEN_TO_TRADE
-var buy_amount = 50;
-var sell_amount = 100;
-var buy_price1 = 0.5;
-var sell_price = 0.75;
+var pancakeswap_lp_token = '0xf0392655fe50A7C5c10B592ab759569B4F16FF12'; //PANCAKE_LP_BUSD
+var token_contract = '0xa9A2589C2301456de4B100c79753E3b0Bdd4A0dd'; //TOKEN_TO_TRADE
+ 
 
 
 
@@ -17,7 +14,7 @@ var ENV = process.env;
 var serverbnb = "https://bsc-dataseed1.defibit.io";
 var my_addr = ENV.MY_ADDR;
 var router = '0x10ED43C718714eb63d5aA57B78B54704E256024E';
-var busd = '0x55d398326f99059fF775485246999027B3197955';
+var busd = '0xe9e7CEA3DedcA5984780Bafc599bD69ADd087D56';
 const web3 = new Web3(serverbnb);
 
 
@@ -74,7 +71,7 @@ var AAA = {
         try {
             var contract = new web3.eth.Contract(abi, c);
             await contract.methods.getReserves().call().then(function(resp) {
-                rate_coin = (resp[0] / resp[1]);
+                rate_coin = (resp[1] / resp[0]);
                 // console.log(rate_coin);
                 // return rate_coin;
                 // d(rate_coin);
@@ -263,38 +260,38 @@ var AAA = {
 
 
 
-var event = async function() {
-    var contract = new web3.eth.Contract(abi.erc20, token_contract);
-    let block = await web3.eth.getBlockNumber();
-    try {
+// var event = async function() {
+//     var contract = new web3.eth.Contract(abi.erc20, token_contract);
+//     let block = await web3.eth.getBlockNumber();
+//     try {
 
-        console.log(block)
-        contract.getPastEvents('Transfer', {
-                filter: {},
-                fromBlock: block - 120,
-                toBlock: block
-            }, function(error, events) {})
-            .then(async function(events) {
+//         console.log(block)
+//         contract.getPastEvents('Transfer', {
+//                 filter: {},
+//                 fromBlock: block - 120,
+//                 toBlock: block
+//             }, function(error, events) {})
+//             .then(async function(events) {
 
-                console.log(events);
+//                 console.log(events);
 
-                console.log("EVENTS", events.length);
-                if (events.length == 0) runing(0);
-                else
-                    runing(1);
+//                 console.log("EVENTS", events.length);
+//                 if (events.length == 0) runing(0);
+//                 else
+//                     runing(1);
 
-            });
-
-
-    } catch (error) {
-        console.log(error);
-    }
-
-}
+//             });
 
 
+//     } catch (error) {
+//         console.log(error);
+//     }
 
-var runing = async function(send) {
+// }
+
+
+let send = 0;
+var runing = async function() {
 
 
 
@@ -318,11 +315,11 @@ var runing = async function(send) {
 
 
 
-    let USDTAMOUNT = Math.random() * 30 + 20;
-    let BUYPRICE = 1;
-    let SELLPRICE = 1.5;
+    let USDTAMOUNT = Math.random() * 100;
+    let BUYPRICE = 0.1;
+    let SELLPRICE = 0.00001;
 
-    let USDTAMOUNTS = Math.random() * 100 + 300;
+    let USDTAMOUNTS = Math.random() * 100;
 
 
     if (send == 1)
@@ -330,6 +327,7 @@ var runing = async function(send) {
             if (rate > SELLPRICE) {
                 console.log("sell");
                 AAA.sell(USDTAMOUNTS / rate);
+                send = 0;
             }
 
 
@@ -340,10 +338,12 @@ var runing = async function(send) {
                 console.log("buy");
                 let amountOutMin = USDTAMOUNT / rate * 0.99;
                 AAA.buy(USDTAMOUNT, amountOutMin);
+                send = 1;
             }
 
 
 }
 
-setInterval(event, 30000);
-event();
+setInterval(function(){runing()}, 30000);
+runing();
+// event();
