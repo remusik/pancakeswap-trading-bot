@@ -322,6 +322,9 @@ var runing = async function() {
     let USDTAMOUNTS = Math.random() * 100;
 
 
+
+    
+
     if (send == 1)
         if (balance_token >= USDTAMOUNTS / rate)
             if (rate > SELLPRICE) {
